@@ -6,7 +6,7 @@ A Flutter app that:
 - Saves samples locally
 - Shows battery percentage through native platform channels
 - Keeps tracking active on Android with a foreground service
-- Uses a clean, easy-to-explain layered architecture
+- Uses a clean layered architecture
 
 ## What This Project Demonstrates
 
@@ -15,7 +15,7 @@ This assessment is mainly about three things:
 1. Background location tracking logic
 2. Native integration for battery percentage
 3. Code structure
-I kept the implementation intentionally simple so the flow is easy to understand:
+The implementation intentionally simple so the flow is easy to understand:
 
 - Flutter UI starts and stops tracking
 - A background service handles the Android tracking loop
