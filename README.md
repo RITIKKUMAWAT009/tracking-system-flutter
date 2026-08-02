@@ -6,7 +6,7 @@ A Flutter app that:
 - Saves samples locally
 - Shows battery percentage through native platform channels
 - Keeps tracking active on Android with a foreground service
-- Uses a clean, easy-to-explain layered architecture
+- Uses a clean layered architecture
 
 ## What This Project Demonstrates
 
@@ -14,9 +14,8 @@ This assessment is mainly about three things:
 
 1. Background location tracking logic
 2. Native integration for battery percentage
-3. Code structure that is easy to explain in an interview
-
-I kept the implementation intentionally simple so the flow is easy to understand:
+3. Code structure
+The implementation intentionally simple so the flow is easy to understand:
 
 - Flutter UI starts and stops tracking
 - A background service handles the Android tracking loop
@@ -256,30 +255,3 @@ This wraps the native channel name and handles MethodChannel calls from Flutter.
 2. Run the app on a physical Android device for the full background behavior
 3. On iOS Simulator, the battery shows a demo value because simulators do not expose real battery state
 4. On a real iPhone, battery and background location behavior are more realistic
-
-## Testing Notes
-
-- Android background tracking is best tested on a real device
-- iOS background location can be tested on a real device, but force-kill behavior is limited by the OS
-- The app currently uses a demo-friendly battery fallback on iOS Simulator
-
-## Interview Explanation Summary
-
-If you need a short answer during Round 2, you can describe the app like this:
-
-- The UI starts and stops a tracking session
-- A foreground service handles Android background capture
-- Geolocator fetches each GPS sample every 60 seconds
-- Each record is saved locally in SQLite
-- Battery percentage is fetched through native MethodChannels on Android and iOS
-- The app is organized using a clean layered architecture so the flow is easy to test and explain
-
-## Possible Improvements
-
-If you have more time, the next improvements would be:
-
-- Add a map view
-- Add export/share of sessions
-- Add session start and stop timestamps
-- Add stronger Android restart handling
-- Add a better history screen
