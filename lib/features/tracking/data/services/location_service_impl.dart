@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart' as geo;
 class LocationServiceImpl implements LocationService {
   const LocationServiceImpl();
 
+
   @override
   Future<Either<Failure, LocationEntity>> getCurrentLocation() async {
     try {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:background_location_tracker/core/utils/app_enums.dart';
+import 'package:background_location_tracker/features/tracking/domain/usecases/check_tracking_status_usecase.dart';
 import 'package:background_location_tracker/features/tracking/domain/usecases/get_battery_usecase.dart';
 import 'package:background_location_tracker/features/tracking/domain/usecases/get_locations_usecase.dart';
 import 'package:background_location_tracker/features/tracking/domain/usecases/save_location_usecase.dart';
@@ -17,6 +18,7 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
   final GetLocationsUseCase getLocationsUseCase;
   final SaveLocationUseCase saveLocationUseCase;
   final GetBatteryUseCase getBatteryUseCase;
+  final CheckTrackingStatusUseCase checkTrackingStatusUseCase;
   Timer? _batteryTimer;
   Timer? _locationsRefreshTimer;
 
@@ -26,18 +28,44 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
     required this.getLocationsUseCase,
     required this.saveLocationUseCase,
     required this.getBatteryUseCase,
+    required this.checkTrackingStatusUseCase,
   }) : super(const TrackingState()) {
     on<LoadLocationsRequested>(_onLoadLocations);
     on<StartTrackingRequested>(_onStartTracking);
     on<StopTrackingRequested>(_onStopTracking);
     on<BatteryRequested>(_onBatteryRequested);
     on<SaveLocationRequested>(_onSaveLocation);
+    on<CheckTrackingStatusRequested>(_onCheckTrackingStatus);
 
+    add(const CheckTrackingStatusRequested());
     add(const BatteryRequested());
     _batteryTimer = Timer.periodic(
       const Duration(seconds: 30),
       (_) => add(const BatteryRequested()),
     );
+  }
+  Future<void> _onCheckTrackingStatus(
+    CheckTrackingStatusRequested event,
+    Emitter<TrackingState> emit,
+  ) async {
+    final result = await checkTrackingStatusUseCase();
+
+    result.fold((failure) {}, (running) {
+      emit(
+        state.copyWith(
+          isTracking: running,
+          status: running ? TrackingStatus.tracking : TrackingStatus.stopped,
+        ),
+      );
+
+      if (running) {
+        _locationsRefreshTimer?.cancel();
+        _locationsRefreshTimer = Timer.periodic(
+          const Duration(seconds: 60),
+          (_) => add(const LoadLocationsRequested()),
+        );
+      }
+    });
   }
 
   Future<void> _onLoadLocations(

@@ -5,4 +5,5 @@ abstract class TrackingService {
   Future<Either<Failure, void>> start();
 
   Future<Either<Failure, void>> stop();
+  Future<Either<Failure, bool>> isTracking();
 }

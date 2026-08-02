@@ -7,6 +7,9 @@ abstract class TrackingEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
+class CheckTrackingStatusRequested extends TrackingEvent {
+  const CheckTrackingStatusRequested();
+}
 
 class SaveLocationRequested extends TrackingEvent {
   final LocationEntity location;

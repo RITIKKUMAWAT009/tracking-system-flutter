@@ -24,7 +24,16 @@ class TrackingServiceImpl implements TrackingService {
   final PlatformChannel _platformChannel;
 
   StreamSubscription? _iosLocationSubscription;
+@override
+Future<Either<Failure, bool>> isTracking() async {
+  try {
+    final running = await FlutterBackgroundService().isRunning();
 
+    return Right(running);
+  } catch (e) {
+    return Left(UnknownFailure(e.toString()));
+  }
+}
   @override
   Future<Either<Failure, void>> start() async {
     try {

@@ -1,15 +1,16 @@
+import 'package:background_location_tracker/core/platform/battery_channel.dart';
+import 'package:background_location_tracker/core/platform/platform_channel.dart';
 import 'package:background_location_tracker/features/tracking/data/datasources/location_local_datasource.dart';
 import 'package:background_location_tracker/features/tracking/data/datasources/location_local_datasource_impl.dart';
 import 'package:background_location_tracker/features/tracking/data/repositories/tracking_repository_impl.dart';
 import 'package:background_location_tracker/features/tracking/data/services/battery_service_impl.dart';
 import 'package:background_location_tracker/features/tracking/data/services/location_service_impl.dart';
 import 'package:background_location_tracker/features/tracking/data/services/tracking_service_impl.dart';
-import 'package:background_location_tracker/core/platform/battery_channel.dart';
-import 'package:background_location_tracker/core/platform/platform_channel.dart';
 import 'package:background_location_tracker/features/tracking/domain/repositories/location_repository.dart';
 import 'package:background_location_tracker/features/tracking/domain/services/battery_service.dart';
 import 'package:background_location_tracker/features/tracking/domain/services/location_service.dart';
 import 'package:background_location_tracker/features/tracking/domain/services/tracking_service.dart';
+import 'package:background_location_tracker/features/tracking/domain/usecases/check_tracking_status_usecase.dart';
 import 'package:background_location_tracker/features/tracking/domain/usecases/get_battery_usecase.dart';
 import 'package:background_location_tracker/features/tracking/domain/usecases/get_locations_usecase.dart';
 import 'package:background_location_tracker/features/tracking/domain/usecases/save_location_usecase.dart';
@@ -52,6 +53,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => StartTrackingUseCase(sl()));
 
   sl.registerLazySingleton(() => StopTrackingUseCase(sl()));
+  sl.registerLazySingleton(() => CheckTrackingStatusUseCase(sl()));
 
   sl.registerLazySingleton(() => GetBatteryUseCase(sl()));
 
@@ -63,6 +65,7 @@ Future<void> initDependencies() async {
       saveLocationUseCase: sl(),
       getLocationsUseCase: sl(),
       getBatteryUseCase: sl(),
+      checkTrackingStatusUseCase: sl(),
     ),
   );
 }
